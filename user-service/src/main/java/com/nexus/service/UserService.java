@@ -1,8 +1,8 @@
-package service;
+package com.nexus.service;
 
-import dto.LoginRequestDto;
-import dto.UserCreateRequestDto;
-import dto.UserResponseDto;
+import com.nexus.dto.LoginRequestDto;
+import com.nexus.dto.UserCreateRequestDto;
+import com.nexus.dto.UserResponseDto;
 
 public interface UserService {
     UserResponseDto register(UserCreateRequestDto dto);

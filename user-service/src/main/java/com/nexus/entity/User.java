@@ -1,4 +1,4 @@
-package entity;
+package com.nexus.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,6 +1,6 @@
-package repository;
+package com.nexus.repository;
 
-import entity.User;
+import com.nexus.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
