@@ -1,16 +1,17 @@
 package com.nexus.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private final Key key;
+    private final SecretKey key;
     private final Long jwtExpirationInMs;
 
 
@@ -30,5 +31,14 @@ public class JwtUtil {
                     .expiration(new Date(nowMillis + jwtExpirationInMs))
                     .signWith(key)
                     .compact();
+    }
+
+    public void validateToken(String token) {
+        Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
+    }
+
+    public Long getUserIdFromToken(String token) {
+        Claims claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getBody();
+        return Long.valueOf(claims.getSubject());
     }
 }
