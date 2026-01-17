@@ -1,4 +1,6 @@
 package com.ecommerce.gateway.filter;
 
-public class CustomGlobalFilter implements GlobalFilter{
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+
+public class CustomGlobalFilter extends GlobalFilter {
 }
