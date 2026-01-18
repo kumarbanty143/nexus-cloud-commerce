@@ -28,7 +28,7 @@ public class Product {
     private int quantity;
     private String brand;
     private String imageUrl;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
     private LocalDateTime createdAt;
