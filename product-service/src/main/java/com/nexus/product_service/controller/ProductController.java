@@ -3,7 +3,7 @@ package com.nexus.product_service.controller;
 import com.nexus.product_service.dto.ProductDto;
 import com.nexus.product_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.Page;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductDto> deleteProduct(@PathVariable Long id){
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id){
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product Deleted Successfully");
     }
@@ -51,7 +51,7 @@ public class ProductController {
 
     @GetMapping("/adv-filter")
     public ResponseEntity<Page<ProductDto>> advancedFilter(@RequestParam String keyword, @RequestParam(required = false) Long categoryId, @RequestParam(required = false) Double minPrice, @RequestParam(required = false) Double maxPrice, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy, @RequestParam(defaultValue = "asc") String sortDir){
-        return ResponseEntity.ok(productService.advanceFilter(keyword, categoryId, minPrice, ,maxPrice, page, size, sortBy, sortDir));
+        return ResponseEntity.ok(productService.advanceFilter(keyword, categoryId, minPrice ,maxPrice, page, size, sortBy, sortDir));
     }
 
 }
