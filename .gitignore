@@ -9,36 +9,23 @@ replay_pid*
 # Maven
 target/
 .mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+**/target/
+**/*.class
 
-# IDEs
+# IDE - IntelliJ IDEA (The important part)
+.idea/
+**/.idea/
+*.iws
+*.iml
+*.ipr
+out/
+**/out/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
+# IDE - Visual Studio Code
 .vscode/
+**/.vscode/
 
-# Package Files #
+# Package Files
 *.jar
 *.war
 *.nar
