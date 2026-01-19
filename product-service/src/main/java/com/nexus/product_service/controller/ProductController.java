@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/products")
@@ -52,6 +55,11 @@ public class ProductController {
     @GetMapping("/adv-filter")
     public ResponseEntity<Page<ProductDto>> advancedFilter(@RequestParam String keyword, @RequestParam(required = false) Long categoryId, @RequestParam(required = false) Double minPrice, @RequestParam(required = false) Double maxPrice, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy, @RequestParam(defaultValue = "asc") String sortDir){
         return ResponseEntity.ok(productService.advanceFilter(keyword, categoryId, minPrice ,maxPrice, page, size, sortBy, sortDir));
+    }
+
+    @PostMapping("/{id}/upload-image")
+    public ResponseEntity<ProductDto> uploadImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(productService.uploadImage(id, file));
     }
 
 }
