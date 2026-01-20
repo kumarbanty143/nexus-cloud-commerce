@@ -1,5 +1,7 @@
 package impl;
 
+import client.InventoryFeignClient;
+import dto.InventoryResponseDto;
 import dto.OrderRequestDto;
 import dto.OrderResponseDto;
 import entity.Order;
@@ -16,9 +18,14 @@ import java.util.UUID;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final InventoryFeignClient inventoryFeignClient;
 
     @Override
     public OrderResponseDto placeOrder(OrderRequestDto orderRequestDto) {
+        InventoryResponseDto inventoryResponseDto = inventoryFeignClient.inInStock(orderRequestDto.getSkuCode());
+        if(!inventoryResponseDto.isInStock()){
+            throw  new RuntimeException("Order is out of stock");
+        }
         Order order = orderMapper.toEntity(orderRequestDto);
         order.setOrderNo(UUID.randomUUID().toString());
         order.setOrderStatus("CREATED");
