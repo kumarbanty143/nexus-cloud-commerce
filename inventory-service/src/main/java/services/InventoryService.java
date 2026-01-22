@@ -3,6 +3,7 @@ package services;
 import dto.InventoryRequest;
 import dto.InventoryResponse;
 import entity.Inventory;
+import event.OrderPlacedEvent;
 import exception.InventoryNotFound;
 import lombok.RequiredArgsConstructor;
 import mapper.InventoryMapper;
@@ -20,6 +21,18 @@ public class InventoryService {
     }
     public void addInventory(InventoryRequest request){
         Inventory inventory = inventoryMapper.toEntity(request);
+        inventoryRepository.save(inventory);
+    }
+
+    public void updateStock(OrderPlacedEvent event){
+        Inventory inventory = inventoryRepository.findBySkuCode(event.getSkuCode())
+                .orElseThrow(()-> new InventoryNotFound(event.getSkuCode()));
+        Integer availableQuantity = inventory.getQuantity();
+        Integer orderQuantity = event.getQuantity();
+        if(availableQuantity <orderQuantity){
+            throw new RuntimeException("Insufficient stock for this sku code");
+        }
+        inventory.setQuantity(availableQuantity -orderQuantity);
         inventoryRepository.save(inventory);
     }
 }
