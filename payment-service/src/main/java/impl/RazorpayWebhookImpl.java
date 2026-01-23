@@ -63,7 +63,13 @@ public class RazorpayWebhookImpl {
     }
 
     private void handlePaymentFailed(JSONObject event){
-
+        JSONObject paymentEntity = extractPaymentEntity(event);
+        String razorpayOrderId = paymentEntity.getString("order_id");
+        Payment payment = paymentRepository.findByTransactionId(razorpayOrderId)
+                .orElseThrow(()-> new IllegalStateException("Payment not found for this Razorpay order id"));
+        payment.setPaymentStatus(PaymentStatus.FAILED);
+        inventoryClient.rollbackInventory(payment.getOrderId());
+        orderClient.failOrder(payment.getOrderId());
     }
 
 }
