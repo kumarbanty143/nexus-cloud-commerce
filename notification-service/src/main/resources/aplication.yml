@@ -25,3 +25,8 @@ mail:
         auth: true
         starttls:
           enable: true
+
+twilio:
+  account-sid: AC7ac4ce49ab363137bf35c6b49d7f6b1f
+  auth-token: dd4a4c4d534f0ad4a97a3955dded86f2
+  from-number: +16017567951
