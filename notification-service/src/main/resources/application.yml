@@ -1,8 +1,3 @@
-razorpay:
-  key: rzp_test_xxx
-  secret: xxxx
-  webhook-secret: xxxxx
-
 management:
   tracing:
     sampling:
