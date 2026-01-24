@@ -23,11 +23,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
-    private UserMapper userMapper;
-    private PasswordEncoder passwordEncoder;
-    private JwtUtil jwtUtil;
-    private AuthMapper authMapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final AuthMapper authMapper;
 
     @Override
     public UserResponseDto register(UserCreateRequestDto dto) {

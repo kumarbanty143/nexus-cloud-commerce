@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   kafka:
     bootstrap-servers: localhost:9092
@@ -8,6 +11,16 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserilazer
       properties:
         spring.json.trusted.package: "*"
+
+  datasource:
+    url: jdbc:mysql://localhost:3036/inventory_db
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
 
 management:
   tracing:

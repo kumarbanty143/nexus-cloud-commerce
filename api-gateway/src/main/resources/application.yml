@@ -1,5 +1,5 @@
 server:
-  port: 8084
+  port: 8080
 
 spring:
   application:
@@ -14,7 +14,7 @@ spring:
         - id: USER-SERVICE
           uri: lb://USER-SERVICE
           predicates:
-            - path=/user/**
+            - path=/api/user/**
           filters:
             - CustomRouteFilter
 

@@ -2,8 +2,16 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     producer:
-      key-serializer: org.apache.kafka.comman.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerilazer
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/order_db
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 management:
   tracing:

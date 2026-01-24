@@ -3,7 +3,9 @@ package com.nexus.product_service.mapper;
 import com.nexus.product_service.dto.ProductDto;
 import com.nexus.product_service.entity.Category;
 import com.nexus.product_service.entity.Product;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProductMapper {
     public ProductDto toDto(Product product){
         return ProductDto.builder()
@@ -15,7 +17,9 @@ public class ProductMapper {
                 .quantity(product.getQuantity())
                 .brand(product.getBrand())
                 .imageUrl(product.getImageUrl())
-                .categoryId(product.getCategory().getId())
+                .categoryId(
+                        product.getCategory() != null ? product.getCategory().getId(): null
+                )
                 .build();
     }
 

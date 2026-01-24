@@ -2,7 +2,9 @@ package com.nexus.product_service.mapper;
 
 import com.nexus.product_service.dto.CategoryDto;
 import com.nexus.product_service.entity.Category;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CategoryMapper {
     public CategoryDto toDto(Category category){
         return CategoryDto.builder()

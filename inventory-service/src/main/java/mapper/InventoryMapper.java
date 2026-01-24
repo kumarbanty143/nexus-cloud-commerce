@@ -3,7 +3,9 @@ package mapper;
 import dto.InventoryRequest;
 import dto.InventoryResponse;
 import entity.Inventory;
+import org.springframework.stereotype.Component;
 
+@Component
 public class InventoryMapper {
     public Inventory toEntity(InventoryRequest dto){
         Inventory inventory = new Inventory();

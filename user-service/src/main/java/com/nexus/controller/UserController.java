@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,14 +24,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         LoginResponseDto loggedInUser = userService.login(loginRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(loggedInUser);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getById(@Valid @PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> getById(@Valid @PathVariable Long id, Authentication authentication) {
         UserResponseDto user = userService.getById(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
