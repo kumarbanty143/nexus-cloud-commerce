@@ -1,23 +1,33 @@
+server:
+  port: 8083
+
 spring:
+  application:
+    name: order-service
+
+  config:
+    import: "optional:configserver:http://localhost:8888/"
+
   kafka:
     bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerilazer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
   datasource:
-    url: jdbc:mysql://localhost:3306/order_db
+    url: jdbc:mysql://localhost:3306/order_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
+
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
 
 management:
   tracing:
     sampling:
       probability: 1.0
-
   zipkin:
     tracing:
       endpoint: http://localhost:9411/api/v2/spans
