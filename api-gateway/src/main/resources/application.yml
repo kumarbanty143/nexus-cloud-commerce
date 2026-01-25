@@ -14,7 +14,7 @@ spring:
         - id: USER-SERVICE
           uri: lb://USER-SERVICE
           predicates:
-            - path=/api/user/**
+            - Path=/api/user/**
           filters:
             - CustomRouteFilter
 
