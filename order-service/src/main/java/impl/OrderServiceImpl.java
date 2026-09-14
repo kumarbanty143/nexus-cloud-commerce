@@ -22,12 +22,16 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final InventoryFeignClient inventoryFeignClient;
-    private OrderEventProducer orderEventProducer;
+    private final OrderEventProducer orderEventProducer;
 
     @Override
     public OrderResponseDto placeOrder(OrderRequestDto orderRequestDto) {
+        if (orderRequestDto.getQuantity() == null || orderRequestDto.getQuantity() < 1) {
+            throw new IllegalArgumentException("Quantity must be at least 1");
+        }
         InventoryResponseDto inventoryResponseDto = inventoryFeignClient.inInStock(orderRequestDto.getSkuCode());
-        if(!inventoryResponseDto.isInStock()){
+        if(!inventoryResponseDto.isInStock() || inventoryResponseDto.getAvailableQuantity() == null
+                || inventoryResponseDto.getAvailableQuantity() < orderRequestDto.getQuantity()){
             throw  new RuntimeException("Order is out of stock");
         }
         Order order = orderMapper.toEntity(orderRequestDto);
@@ -40,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
         orderPlacedEvent.setEventId(UUID.randomUUID().toString());
         orderPlacedEvent.setOrderId(orderId);
         orderPlacedEvent.setSkuCode(orderRequestDto.getSkuCode());
-        orderPlacedEvent.setQuantity(orderPlacedEvent.getQuantity());
+        orderPlacedEvent.setQuantity(orderRequestDto.getQuantity());
         orderPlacedEvent.setEventTime(LocalDateTime.now());
         orderEventProducer.sendOrderEvent(orderPlacedEvent);
 

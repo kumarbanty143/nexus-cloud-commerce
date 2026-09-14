@@ -5,9 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.nexus.order_service", "controller", "impl", "mapper", "kafka", "config"})
+@org.springframework.boot.autoconfigure.domain.EntityScan("entity")
+@org.springframework.data.jpa.repository.config.EnableJpaRepositories("repository")
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "client")
 public class OrderServiceApplication {
 
 	public static void main(String[] args) {

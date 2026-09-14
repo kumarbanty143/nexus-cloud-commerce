@@ -32,7 +32,12 @@ public class InventoryService {
 
     @Transactional
     public void updateStock(OrderPlacedEvent event){
-        if(!processedOrderRepository.existsByOrderId(event.getOrderId())){
+        if (event.getOrderId() == null || event.getOrderId().isBlank()
+                || event.getSkuCode() == null || event.getSkuCode().isBlank()
+                || event.getQuantity() == null || event.getQuantity() < 1) {
+            throw new IllegalArgumentException("Order ID, SKU and positive quantity are required");
+        }
+        if(processedOrderRepository.existsByOrderId(event.getOrderId())){
             return;
         }
         Inventory inventory = inventoryRepository.findBySkuCode(event.getSkuCode())
