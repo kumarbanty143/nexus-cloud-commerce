@@ -29,7 +29,7 @@ public class RazorpayWebhookImpl {
         log.info("Received Razorpay webhook event: "+eventType);
 
         switch (eventType){
-            case "payment.captyred" -> handlePaymentSuccess(event);
+            case "payment.captured" -> handlePaymentSuccess(event);
             case "payment.failed" -> handlePaymentFailed(event);
             default -> log.warn("Unhandled Razorpay event: "+eventType);
         }
@@ -37,7 +37,9 @@ public class RazorpayWebhookImpl {
 
     private void verifySignature(String signature, String payload){
         try{
-            Utils.verifyWebhookSignature(payload, signature, webhookSecret);
+            if (!Utils.verifyWebhookSignature(payload, signature, webhookSecret)) {
+                throw new SecurityException("Invalid Razorpay webhook signature");
+            }
         }catch (Exception e){
             log.error("Invalid Razorpay webhook signature");
             throw  new SecurityException("Invalid Razorpay webhook signature");
@@ -50,10 +52,14 @@ public class RazorpayWebhookImpl {
         String razorPayPaymentId = paymentEntity.getString("id");
         Payment payment = paymentRepository.findByTransactionId(razorpayOrderId)
                 .orElseThrow(()-> new IllegalStateException("Payment not found for this Razorpay order id"));
+        if (payment.getPaymentStatus() == PaymentStatus.SUCCESS) {
+            return;
+        }
         payment.setPaymentStatus(PaymentStatus.SUCCESS);
         payment.setGatewayPaymentId(razorPayPaymentId);
         orderClient.confirmOrder(payment.getOrderId());
         inventoryClient.commitInventory(payment.getOrderId());
+        paymentRepository.save(payment);
     }
 
     private JSONObject extractPaymentEntity(JSONObject event){
@@ -67,9 +73,14 @@ public class RazorpayWebhookImpl {
         String razorpayOrderId = paymentEntity.getString("order_id");
         Payment payment = paymentRepository.findByTransactionId(razorpayOrderId)
                 .orElseThrow(()-> new IllegalStateException("Payment not found for this Razorpay order id"));
+        if (payment.getPaymentStatus() == PaymentStatus.SUCCESS
+                || payment.getPaymentStatus() == PaymentStatus.FAILED) {
+            return;
+        }
         payment.setPaymentStatus(PaymentStatus.FAILED);
         inventoryClient.rollbackInventory(payment.getOrderId());
         orderClient.failOrder(payment.getOrderId());
+        paymentRepository.save(payment);
     }
 
 }

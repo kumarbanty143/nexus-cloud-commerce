@@ -21,7 +21,7 @@ public class RazorpayPaymentGatewayImpl implements PaymentGateway {
             JSONObject options = new JSONObject();
             options.put("amount", amount.multiply(BigDecimal.valueOf(100)));
             options.put("currency", "INR");
-            options.put("receipt", "orderId");
+            options.put("receipt", orderId);
             Order order = razorpayClient.orders.create(options);
             return new GatewayOrderResponse(order.get("id"),
                     order.get("currency"),
